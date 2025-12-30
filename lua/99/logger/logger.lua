@@ -228,12 +228,11 @@ function Logger:_cache_log(line)
     end
     cache.last_access = time.now()
     table.insert(cache.logs, line)
-
-    logger_list = vim.fn.sort(logger_list, function(a, b)
+    table.sort(logger_list, function(a, b)
         assert(logger_cache[a] and logger_cache[b], "logger list is out of sync with logger cache: " .. tostring(a) .. " and " .. tostring(b))
         local a_time = logger_cache[a].last_access
         local b_time = logger_cache[b].last_access
-        return b_time - a_time
+        return b_time > a_time
     end)
 
     if not new_cache then

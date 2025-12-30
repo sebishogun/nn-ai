@@ -131,13 +131,13 @@ function _99.view_logs()
     Window.display_full_screen_message(logs[1])
 end
 
-function _99.next_request_logs()
+function _99.prev_request_logs()
     local logs = Logger.logs()
-    _99_state.__view_log_idx = math.min(_99_state.__view_log_idx + 1, 1)
+    _99_state.__view_log_idx = math.min(_99_state.__view_log_idx + 1, #logs)
     Window.display_full_screen_message(logs[_99_state.__view_log_idx])
 end
 
-function _99.prev_request_logs()
+function _99.next_request_logs()
     local logs = Logger.logs()
     _99_state.__view_log_idx = math.max(_99_state.__view_log_idx - 1, 1)
     Window.display_full_screen_message(logs[_99_state.__view_log_idx])
