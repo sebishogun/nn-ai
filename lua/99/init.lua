@@ -145,7 +145,7 @@ function _99.info()
     Window.display_centered_message(info)
 end
 
-function _99.fill_in_function_with_prompt()
+function _99.fill_in_function_prompt()
     local context = get_context("fill-in-function-with-prompt")
     context.logger:debug("start")
     Window.capture_input(function(success, response)
