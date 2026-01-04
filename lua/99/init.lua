@@ -160,7 +160,6 @@ function _99.fill_in_function_prompt()
             ops.fill_in_function(context, response)
         end
     end, {})
-    ops.fill_in_function(get_context("fill_in_function"))
 end
 
 function _99.fill_in_function()
