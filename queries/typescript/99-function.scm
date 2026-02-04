@@ -1,5 +1,5 @@
 (function_declaration) @context.function
-(function_expression) @context.function
+(function) @context.function
 (arrow_function) @context.function
 (method_definition) @context.function
 (generator_function) @context.function
