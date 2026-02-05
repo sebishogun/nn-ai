@@ -313,7 +313,7 @@ end
 
 --- @return string
 function CodexProvider._get_default_model()
-  return "gpt-5.1-codex-max"
+  return "gpt-codex-5.2-xhigh"
 end
 
 return {
