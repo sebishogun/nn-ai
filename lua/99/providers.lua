@@ -229,9 +229,40 @@ function KiroProvider._get_default_model()
   return "claude-sonnet-4.5"
 end
 
+--- @class CopilotCLIProvider : _99.Providers.BaseProvider
+--- GitHub Copilot CLI provider using the new `copilot` command
+--- Requires Copilot CLI to be installed: https://docs.github.com/en/copilot/how-tos/copilot-cli/install-copilot-cli
+local CopilotCLIProvider = setmetatable({}, { __index = BaseProvider })
+
+--- @param query string
+--- @param request _99.Request
+--- @return string[]
+function CopilotCLIProvider._build_command(_, query, request)
+  return {
+    "copilot",
+    "--prompt",
+    query,
+    "--model",
+    request.context.model,
+    "--silent",
+    "--allow-all-tools",
+  }
+end
+
+--- @return string
+function CopilotCLIProvider._get_provider_name()
+  return "CopilotCLIProvider"
+end
+
+--- @return string
+function CopilotCLIProvider._get_default_model()
+  return "claude-sonnet-4.5"
+end
+
 return {
   OpenCodeProvider = OpenCodeProvider,
   ClaudeCodeProvider = ClaudeCodeProvider,
   CursorAgentProvider = CursorAgentProvider,
   KiroProvider = KiroProvider,
+  CopilotCLIProvider = CopilotCLIProvider,
 }
