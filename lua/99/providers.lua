@@ -285,7 +285,7 @@ end
 
 --- @return string
 function GeminiProvider._get_default_model()
-  return "gemini-2.5-pro"
+  return "gemini-3-pro-preview"
 end
 
 --- @class CodexProvider : _99.Providers.BaseProvider
