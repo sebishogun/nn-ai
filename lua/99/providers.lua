@@ -313,7 +313,7 @@ end
 
 --- @return string
 function CodexProvider._get_default_model()
-  return "o3"
+  return "codex-5.2"
 end
 
 return {
