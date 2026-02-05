@@ -260,10 +260,68 @@ function CopilotCLIProvider._get_default_model()
   return "claude-sonnet-4.5"
 end
 
+--- @class GeminiProvider : _99.Providers.BaseProvider
+--- Google Gemini CLI provider
+--- Requires Gemini CLI: npm install -g @anthropic-ai/gemini-cli or similar
+local GeminiProvider = setmetatable({}, { __index = BaseProvider })
+
+--- @param query string
+--- @param request _99.Request
+--- @return string[]
+function GeminiProvider._build_command(_, query, request)
+  return {
+    "gemini",
+    "--yolo",           -- Auto-accept all actions
+    "-o", "text",       -- Plain text output
+    "-m", request.context.model,
+    query,
+  }
+end
+
+--- @return string
+function GeminiProvider._get_provider_name()
+  return "GeminiProvider"
+end
+
+--- @return string
+function GeminiProvider._get_default_model()
+  return "gemini-2.5-pro"
+end
+
+--- @class CodexProvider : _99.Providers.BaseProvider
+--- OpenAI Codex CLI provider
+--- Requires Codex CLI to be installed
+local CodexProvider = setmetatable({}, { __index = BaseProvider })
+
+--- @param query string
+--- @param request _99.Request
+--- @return string[]
+function CodexProvider._build_command(_, query, request)
+  return {
+    "codex",
+    "exec",
+    "--dangerously-bypass-approvals-and-sandbox",
+    "-m", request.context.model,
+    query,
+  }
+end
+
+--- @return string
+function CodexProvider._get_provider_name()
+  return "CodexProvider"
+end
+
+--- @return string
+function CodexProvider._get_default_model()
+  return "o3"
+end
+
 return {
   OpenCodeProvider = OpenCodeProvider,
   ClaudeCodeProvider = ClaudeCodeProvider,
   CursorAgentProvider = CursorAgentProvider,
   KiroProvider = KiroProvider,
   CopilotCLIProvider = CopilotCLIProvider,
+  GeminiProvider = GeminiProvider,
+  CodexProvider = CodexProvider,
 }
