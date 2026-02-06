@@ -72,7 +72,7 @@ end
 --- @return _99.StateProps
 local function create_99_state()
   return {
-    model = "opencode/claude-sonnet-4-5",
+    model = "anthropic/claude-opus-4-6",
     md_files = {},
     prompts = require("99.prompt-settings"),
     ai_stdout_rows = 3,
@@ -302,6 +302,57 @@ function _99.info()
     table.insert(info, string.format("* %s", rule.name))
   end
   Window.display_centered_message(info)
+end
+
+function _99.doctor()
+  local lines = { "99 Doctor", "" }
+  local state = _99.__get_state()
+  local provider = state.provider_override or Providers.OpenCodeProvider
+  local provider_name = provider._get_provider_name and provider:_get_provider_name()
+    or "unknown"
+
+  table.insert(lines, string.format("Provider: %s", provider_name))
+  table.insert(lines, string.format("Model: %s", state.model or "<unset>"))
+  table.insert(lines, "")
+
+  local checks = {
+    { name = "opencode", ok = vim.fn.executable("opencode") == 1 },
+    { name = "claude", ok = vim.fn.executable("claude") == 1 },
+    { name = "copilot", ok = vim.fn.executable("copilot") == 1 },
+    { name = "gemini", ok = vim.fn.executable("gemini") == 1 },
+    { name = "codex", ok = vim.fn.executable("codex") == 1 },
+  }
+
+  table.insert(lines, "CLI availability:")
+  for _, check in ipairs(checks) do
+    table.insert(lines, string.format("  %s: %s", check.name, check.ok and "ok" or "missing"))
+  end
+
+  local tmp = vim.fn.stdpath("cache") .. "/99-doctor-write-test"
+  local f = io.open(tmp, "w")
+  local writable = f ~= nil
+  if f then
+    f:write("ok")
+    f:close()
+    os.remove(tmp)
+  end
+
+  table.insert(lines, "")
+  table.insert(lines, string.format("Temp path writable: %s", writable and "ok" or "no"))
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  local ft = vim.bo[bufnr].ft
+  if ft == "typescriptreact" then
+    ft = "typescript"
+  end
+
+  local parser_ok = pcall(vim.treesitter.get_parser, bufnr, ft)
+  local query_ok = pcall(vim.treesitter.query.get, ft, "99-function")
+
+  table.insert(lines, string.format("Treesitter parser (%s): %s", ft, parser_ok and "ok" or "missing"))
+  table.insert(lines, string.format("99-function query (%s): %s", ft, query_ok and "ok" or "missing"))
+
+  Window.display_centered_message(lines)
 end
 
 --- @param path string

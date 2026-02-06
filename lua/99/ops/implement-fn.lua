@@ -22,8 +22,8 @@ end
 local function implement_fn(context)
   local ts = editor.treesitter
   local cursor = Point:from_cursor()
-  local buffer = vim.api.nvim_get_current_buf()
-  local fn_call = ts.fn_call(buffer, cursor)
+  local buffer = context.buffer
+  local fn_call = ts.fn_call(context, cursor)
   local logger = context.logger:set_area("implement_fn")
 
   if not fn_call then
@@ -37,7 +37,7 @@ local function implement_fn(context)
   local request = Request.new(context)
 
   context.marks.end_of_fn_call = Mark.mark_end_of_range(buffer, range)
-  local func = ts.containing_function(buffer, cursor)
+  local func = ts.containing_function(context, cursor)
   if func then
     context.marks.code_placement = Mark.mark_above_func(buffer, func)
   else
@@ -67,7 +67,9 @@ local function implement_fn(context)
     at_call_site:stop()
   end)
 
-  request:add_prompt_content(context._99.prompts.prompts.implement_function)
+  request:add_prompt_content(
+    context._99.prompts.prompts.implement_function(context.file_type)
+  )
   request:start({
     on_stdout = function(line)
       code_placement:push(line)

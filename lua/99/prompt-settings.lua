@@ -42,7 +42,7 @@ export function fizz_buzz(count: number): void {
 }
 </Input>
 <Output>
-function fizz_buzz(count: number): void {
+export function fizz_buzz(count: number): void {
   for (let i = 1; i <= count; i++) {
     if (i %% 15 === 0) {
       console.log("FizzBuzz");
@@ -57,7 +57,7 @@ function fizz_buzz(count: number): void {
 }
 </Output>
 <Notes>
-- The output does NOT include the export statement
+- Keep modifiers/signature details present in the input (e.g. export/async/public)
 - Return ONLY the function, nothing else
 </Notes>
 </Example>

@@ -5,18 +5,26 @@ local Providers = require("99.providers")
 describe("providers", function()
   describe("OpenCodeProvider", function()
     it("builds correct command with model", function()
-      local request = { context = { model = "anthropic/claude-sonnet-4-5" } }
+      local request = { context = { model = "anthropic/claude-opus-4-6" } }
       local cmd =
         Providers.OpenCodeProvider._build_command(nil, "test query", request)
       eq(
-        { "opencode", "run", "-m", "anthropic/claude-sonnet-4-5", "test query" },
+        {
+          "opencode",
+          "run",
+          "--agent",
+          "neovim",
+          "-m",
+          "anthropic/claude-opus-4-6",
+          "test query",
+        },
         cmd
       )
     end)
 
     it("has correct default model", function()
       eq(
-        "opencode/claude-sonnet-4-5",
+        "anthropic/claude-opus-4-6",
         Providers.OpenCodeProvider._get_default_model()
       )
     end)
@@ -24,40 +32,61 @@ describe("providers", function()
 
   describe("ClaudeCodeProvider", function()
     it("builds correct command with model", function()
-      local request = { context = { model = "anthropic/claude-sonnet-4-5" } }
+      local request = { context = { model = "claude-opus-4-6" } }
       local cmd =
         Providers.ClaudeCodeProvider._build_command(nil, "test query", request)
       eq({
         "claude",
         "--dangerously-skip-permissions",
         "--model",
-        "anthropic/claude-sonnet-4-5",
+        "claude-opus-4-6",
         "--print",
         "test query",
       }, cmd)
     end)
 
     it("has correct default model", function()
-      eq("claude-sonnet-4-5", Providers.ClaudeCodeProvider._get_default_model())
+      eq("claude-opus-4-6", Providers.ClaudeCodeProvider._get_default_model())
     end)
   end)
 
-  describe("CursorAgentProvider", function()
+  describe("CopilotCLIProvider", function()
     it("builds correct command with model", function()
-      local request = { context = { model = "anthropic/claude-sonnet-4-5" } }
+      local request = { context = { model = "claude-opus-4.6" } }
       local cmd =
-        Providers.CursorAgentProvider._build_command(nil, "test query", request)
+        Providers.CopilotCLIProvider._build_command(nil, "test query", request)
       eq({
-        "cursor-agent",
+        "copilot",
+        "-p",
+        "test query",
         "--model",
-        "anthropic/claude-sonnet-4-5",
-        "--print",
+        "claude-opus-4.6",
+        "--silent",
+        "--yolo",
+      }, cmd)
+    end)
+
+    it("has correct default model", function()
+      eq("claude-opus-4.6", Providers.CopilotCLIProvider._get_default_model())
+    end)
+  end)
+
+  describe("CodexProvider", function()
+    it("builds correct command with model", function()
+      local request = { context = { model = "gpt-codex-5.3" } }
+      local cmd = Providers.CodexProvider._build_command(nil, "test query", request)
+      eq({
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "-m",
+        "gpt-codex-5.3",
         "test query",
       }, cmd)
     end)
 
     it("has correct default model", function()
-      eq("sonnet-4.5", Providers.CursorAgentProvider._get_default_model())
+      eq("gpt-codex-5.3", Providers.CodexProvider._get_default_model())
     end)
   end)
 
@@ -77,7 +106,7 @@ describe("providers", function()
 
         _99.setup({})
         local state = _99.__get_state()
-        eq("opencode/claude-sonnet-4-5", state.model)
+        eq("anthropic/claude-opus-4-6", state.model)
       end
     )
 
@@ -88,18 +117,7 @@ describe("providers", function()
 
         _99.setup({ provider = Providers.ClaudeCodeProvider })
         local state = _99.__get_state()
-        eq("claude-sonnet-4-5", state.model)
-      end
-    )
-
-    it(
-      "uses CursorAgentProvider default model when provider specified but no model",
-      function()
-        local _99 = require("99")
-
-        _99.setup({ provider = Providers.CursorAgentProvider })
-        local state = _99.__get_state()
-        eq("sonnet-4.5", state.model)
+        eq("claude-opus-4-6", state.model)
       end
     )
 
@@ -119,7 +137,9 @@ describe("providers", function()
     it("all providers have make_request", function()
       eq("function", type(Providers.OpenCodeProvider.make_request))
       eq("function", type(Providers.ClaudeCodeProvider.make_request))
-      eq("function", type(Providers.CursorAgentProvider.make_request))
+      eq("function", type(Providers.CopilotCLIProvider.make_request))
+      eq("function", type(Providers.GeminiProvider.make_request))
+      eq("function", type(Providers.CodexProvider.make_request))
     end)
   end)
 end)

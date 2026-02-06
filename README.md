@@ -102,6 +102,14 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 | `<leader>9q` | Normal | Requests to quickfix |
 | `<leader>9c` | Normal | Clear previous requests |
 
+## Health Check
+
+Run a built-in diagnostic for provider/model/treesitter readiness:
+
+```lua
+:lua require("99").doctor()
+```
+
 ## Provider Commands
 
 Add these commands to switch providers on the fly:
