@@ -231,22 +231,21 @@ function KiroProvider._get_default_model()
 end
 
 --- @class CopilotCLIProvider : _99.Providers.BaseProvider
---- GitHub Copilot CLI provider using the new `copilot` command
---- Requires Copilot CLI to be installed: https://docs.github.com/en/copilot/how-tos/copilot-cli/install-copilot-cli
+--- GitHub Copilot CLI provider using `gh copilot`
+--- Requires: gh extension install github/gh-copilot
 local CopilotCLIProvider = setmetatable({}, { __index = BaseProvider })
 
 --- @param query string
 --- @param request _99.Request
 --- @return string[]
 function CopilotCLIProvider._build_command(_, query, request)
+  -- gh copilot suggest is for shell commands, explain is for explanations
+  -- For code generation, we use suggest with -t shell workaround
+  -- Note: gh copilot is limited compared to other providers
   return {
-    "copilot",
-    "--prompt",
+    "gh", "copilot", "suggest",
+    "-t", "shell",
     query,
-    "--model",
-    request.context.model,
-    "--silent",
-    "--allow-all-tools",
   }
 end
 
