@@ -152,7 +152,7 @@ end
 
 --- @return string
 function OpenCodeProvider._get_default_model()
-  return "opencode/claude-sonnet-4-5"
+  return "anthropic/claude-opus-4-6"
 end
 
 --- @class ClaudeCodeProvider : _99.Providers.BaseProvider
@@ -179,7 +179,7 @@ end
 
 --- @return string
 function ClaudeCodeProvider._get_default_model()
-  return "claude-sonnet-4-5"
+  return "claude-opus-4-6"
 end
 
 --- @class CursorAgentProvider : _99.Providers.BaseProvider
@@ -255,7 +255,7 @@ end
 
 --- @return string
 function CopilotCLIProvider._get_default_model()
-  return "claude-sonnet-4"
+  return "claude-opus-4.6"
 end
 
 --- @class GeminiProvider : _99.Providers.BaseProvider
@@ -311,7 +311,7 @@ end
 
 --- @return string
 function CodexProvider._get_default_model()
-  return "gpt-codex-5.2-xhigh"
+  return "gpt-codex-5.3"
 end
 
 return {
