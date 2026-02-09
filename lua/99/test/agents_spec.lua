@@ -104,7 +104,7 @@ describe("rules: <name>/SKILL.md", function()
       "scratch/custom_rules_2/",
     })
     local rules = Agents.rules(_99)
-    local prompt = "here is a test back-end @front-end and @vim.ls"
+    local prompt = "here is a test back-end #front-end and #vim.ls"
     local found = Agents.by_name(rules, prompt)
 
     eq({ "front-end" }, found.names)

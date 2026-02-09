@@ -85,7 +85,7 @@ function M.find_rules(rules, haystack)
   --- @type _99.Agents.Rule[]
   local out = {}
 
-  for word in haystack:gmatch("@%S+") do
+  for word in haystack:gmatch("#%S+") do
     local rule_string = word:sub(2)
     local rule = M.get_rule_by_path(rules, rule_string)
     if rule then
@@ -109,7 +109,7 @@ function M.by_name(rules, prompt)
   --- @type _99.Agents.Rule[]
   local out_rules = {}
   for word in prompt:gmatch("%S+") do
-    if word:sub(1, 1) == "@" then
+    if word:sub(1, 1) == "#" then
       local w = word:sub(2)
       local rules_by_name = rules.by_name[w]
       if rules_by_name and found[w] == nil then
