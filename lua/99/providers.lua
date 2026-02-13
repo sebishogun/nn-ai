@@ -249,8 +249,10 @@ local CopilotCLIProvider = setmetatable({}, { __index = BaseProvider })
 function CopilotCLIProvider._build_command(_, query, request)
   return {
     "copilot",
-    "-p", query,
-    "--model", request.context.model,
+    "-p",
+    query,
+    "--model",
+    request.context.model,
     "--silent",
     "--yolo",
   }
@@ -277,9 +279,11 @@ local GeminiProvider = setmetatable({}, { __index = BaseProvider })
 function GeminiProvider._build_command(_, query, request)
   return {
     "gemini",
-    "--yolo",           -- Auto-accept all actions
-    "-o", "text",       -- Plain text output
-    "-m", request.context.model,
+    "--yolo", -- Auto-accept all actions
+    "-o",
+    "text", -- Plain text output
+    "-m",
+    request.context.model,
     query,
   }
 end
@@ -307,7 +311,8 @@ function CodexProvider._build_command(_, query, request)
     "codex",
     "exec",
     "--dangerously-bypass-approvals-and-sandbox",
-    "-m", request.context.model,
+    "-m",
+    request.context.model,
     query,
   }
 end

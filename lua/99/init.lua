@@ -80,7 +80,18 @@ local function create_99_state()
     prompts = require("99.prompt-settings"),
     ai_stdout_rows = 3,
     show_in_flight_requests = false,
-    languages = { "lua", "go", "java", "elixir", "cpp", "ruby", "rust", "python", "zig", "typescript" },
+    languages = {
+      "lua",
+      "go",
+      "java",
+      "elixir",
+      "cpp",
+      "ruby",
+      "rust",
+      "python",
+      "zig",
+      "typescript",
+    },
     display_errors = false,
     provider_override = nil,
     auto_add_skills = false,
@@ -344,7 +355,8 @@ function _99.doctor()
   local lines = { "99 Doctor", "" }
   local state = _99.__get_state()
   local provider = state.provider_override or Providers.OpenCodeProvider
-  local provider_name = provider._get_provider_name and provider:_get_provider_name()
+  local provider_name = provider._get_provider_name
+      and provider:_get_provider_name()
     or "unknown"
 
   table.insert(lines, string.format("Provider: %s", provider_name))
@@ -361,7 +373,10 @@ function _99.doctor()
 
   table.insert(lines, "CLI availability:")
   for _, check in ipairs(checks) do
-    table.insert(lines, string.format("  %s: %s", check.name, check.ok and "ok" or "missing"))
+    table.insert(
+      lines,
+      string.format("  %s: %s", check.name, check.ok and "ok" or "missing")
+    )
   end
 
   local tmp = vim.fn.stdpath("cache") .. "/99-doctor-write-test"
@@ -374,7 +389,10 @@ function _99.doctor()
   end
 
   table.insert(lines, "")
-  table.insert(lines, string.format("Temp path writable: %s", writable and "ok" or "no"))
+  table.insert(
+    lines,
+    string.format("Temp path writable: %s", writable and "ok" or "no")
+  )
 
   local bufnr = vim.api.nvim_get_current_buf()
   local ft = vim.bo[bufnr].ft
@@ -385,8 +403,22 @@ function _99.doctor()
   local parser_ok = pcall(vim.treesitter.get_parser, bufnr, ft)
   local query_ok = pcall(vim.treesitter.query.get, ft, "99-function")
 
-  table.insert(lines, string.format("Treesitter parser (%s): %s", ft, parser_ok and "ok" or "missing"))
-  table.insert(lines, string.format("99-function query (%s): %s", ft, query_ok and "ok" or "missing"))
+  table.insert(
+    lines,
+    string.format(
+      "Treesitter parser (%s): %s",
+      ft,
+      parser_ok and "ok" or "missing"
+    )
+  )
+  table.insert(
+    lines,
+    string.format(
+      "99-function query (%s): %s",
+      ft,
+      query_ok and "ok" or "missing"
+    )
+  )
 
   Window.display_centered_message(lines)
 end

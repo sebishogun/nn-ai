@@ -26,7 +26,8 @@ You ALWAYS return ONLY raw code - no markdown fences, no explanations, no conver
   --- @param filetype string The programming language (e.g., "lua", "rust", "go")
   --- @return string
   fill_in_function = function(filetype)
-    return string.format([[
+    return string.format(
+      [[
 You are given a function to implement in %s.
 
 TASK: Create the complete function body.
@@ -90,7 +91,11 @@ export function fizz_buzz(count: number): void {
 </Example>
 
 If there are DIRECTIONS provided, follow them precisely. Do not deviate.
-]], filetype or "the given language", filetype or "", filetype or "the given language")
+]],
+      filetype or "the given language",
+      filetype or "",
+      filetype or "the given language"
+    )
   end,
 
   semantic_search = function()
@@ -132,7 +137,8 @@ baz.js at line 1, char 1 and the next 51 lines
   --- @param filetype string The programming language
   --- @return string
   implement_function = function(filetype)
-    return string.format([[
+    return string.format(
+      [[
 You are given a function call in %s that references a function which does not exist yet.
 
 TASK: Implement the missing function based on how it is being called.
@@ -147,7 +153,11 @@ RULES:
 7. Include appropriate error handling if the language supports it
 
 If there are DIRECTIONS provided, follow them precisely.
-]], filetype or "the given language", filetype or "", filetype or "the given language")
+]],
+      filetype or "the given language",
+      filetype or "",
+      filetype or "the given language"
+    )
   end,
 
   --- Output file instructions
@@ -196,7 +206,13 @@ CRITICAL OUTPUT RULES:
     local start_col = range.start.col
     local end_line = range.end_.row
     local end_col = range.end_.col
-    local location = string.format("Lines %d:%d to %d:%d", start_line, start_col, end_line, end_col)
+    local location = string.format(
+      "Lines %d:%d to %d:%d",
+      start_line,
+      start_col,
+      end_line,
+      end_col
+    )
 
     return string.format(
       [[

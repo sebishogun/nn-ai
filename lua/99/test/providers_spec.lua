@@ -71,7 +71,8 @@ describe("providers", function()
   describe("CodexProvider", function()
     it("builds correct command with model", function()
       local request = { context = { model = "gpt-codex-5.3" } }
-      local cmd = Providers.CodexProvider._build_command(nil, "test query", request)
+      local cmd =
+        Providers.CodexProvider._build_command(nil, "test query", request)
       eq({
         "codex",
         "exec",

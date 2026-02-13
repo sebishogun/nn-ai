@@ -41,7 +41,8 @@ local function find_import_insert_line(buffer)
   local last_import_line = -1
   for i, line in ipairs(lines) do
     -- Match common import patterns across languages
-    if line:match("^import ")
+    if
+      line:match("^import ")
       or line:match("^from .+ import")
       or line:match("^use ")
       or line:match("^local .+ = require")
@@ -50,7 +51,8 @@ local function find_import_insert_line(buffer)
       or line:match("^const .+ = require")
       or line:match("^const {.+} from")
       or line:match("^import {")
-      or line:match("^import %(") then
+      or line:match("^import %(")
+    then
       last_import_line = i -- 1-based
     end
   end
@@ -156,7 +158,8 @@ local function fill_in_function(context, opts)
   local cursor
   if context.cursor_pos then
     -- cursor_pos is [row, col] from nvim_win_get_cursor (1-indexed row, 0-indexed col)
-    cursor = Point.from_0_based(context.cursor_pos[1] - 1, context.cursor_pos[2])
+    cursor =
+      Point.from_0_based(context.cursor_pos[1] - 1, context.cursor_pos[2])
   else
     cursor = Point:from_cursor()
   end
@@ -165,11 +168,21 @@ local function fill_in_function(context, opts)
   local func = ok and result or nil
 
   if not func then
-    local detail = not ok
-      and tostring(result)
-      or ("is treesitter parser installed for " .. (context.file_type or "unknown") .. "?")
-    logger:error("fill_in_function: unable to find containing function", "error", detail)
-    vim.notify("99: No function found at cursor position (" .. detail .. ")", vim.log.levels.WARN)
+    local detail = not ok and tostring(result)
+      or (
+        "is treesitter parser installed for "
+        .. (context.file_type or "unknown")
+        .. "?"
+      )
+    logger:error(
+      "fill_in_function: unable to find containing function",
+      "error",
+      detail
+    )
+    vim.notify(
+      "99: No function found at cursor position (" .. detail .. ")",
+      vim.log.levels.WARN
+    )
     return
   end
 
@@ -182,7 +195,8 @@ local function fill_in_function(context, opts)
   end
 
   local request = Request.new(context)
-  local full_prompt = context._99.prompts.prompts.fill_in_function(context.file_type)
+  local full_prompt =
+    context._99.prompts.prompts.fill_in_function(context.file_type)
   local additional_prompt = opts.additional_prompt
   if additional_prompt then
     full_prompt =
