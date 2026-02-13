@@ -296,7 +296,14 @@ local function capture_prompt(cb, name, context, opts)
         table.insert(opts.additional_rules, r)
       end
       opts.additional_prompt = response
-      cb(context, opts)
+      local success, err = pcall(cb, context, opts)
+      if not success then
+        context.logger:error("capture_prompt failed", "error", tostring(err))
+        vim.notify(
+          "99: " .. name .. " failed: " .. tostring(err),
+          vim.log.levels.ERROR
+        )
+      end
     end,
     on_load = function()
       Extensions.setup_buffer(_99_state)
@@ -403,25 +410,30 @@ function _99.search(opts)
   end
 end
 
---- @param opts _99.ops.Opts
+--- @param opts _99.ops.Opts?
+function _99.fill_in_function(opts)
+  opts = process_opts(opts)
+  local context = get_context("fill_in_function")
+  ops.fill_in_function(context, opts)
+end
+
+--- @param opts _99.ops.Opts?
+function _99.fill_in_function_prompt(opts)
+  opts = process_opts(opts)
+  local context = get_context("fill_in_function")
+  capture_prompt(ops.fill_in_function, "Fill In Function", context, opts)
+end
+
+--- @param opts _99.ops.Opts?
 function _99.visual_prompt(opts)
-  vim.notify(
-    "use visual, visual_prompt has been deprecated",
-    vim.log.levels.WARN
-  )
-  _99.visual(opts)
-end
-
-function _99.fill_in_function()
-  error(
-    "function has been removed. Just use visual. I really hate fill in function, sorry :)"
-  )
-end
-
-function _99.fill_in_function_prompt()
-  error(
-    "function has been removed. Just use visual. I really hate fill in function, sorry :)"
-  )
+  opts = process_opts(opts)
+  local context = get_context("visual")
+  local function perform_range()
+    set_selection_marks()
+    local range = Range.from_visual_selection()
+    ops.over_range(context, range, opts)
+  end
+  capture_prompt(perform_range, "Visual", context, opts)
 end
 
 --- @param opts _99.ops.Opts?

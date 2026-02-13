@@ -32,13 +32,37 @@ You are given a function to implement in %s.
 TASK: Create the complete function body.
 
 RULES:
-1. Return ONLY the complete function including its signature
-2. Do NOT include any text before or after the function
-3. Do NOT wrap code in markdown fences (no ```%s or ``` blocks)
-4. Do NOT include explanations or comments about what you did
-5. If the function already has partial contents, use those as context
-6. Check the file for helper functions, types, or context you can use
-7. Write idiomatic %s code following best practices
+1. Do NOT wrap code in markdown fences (no ```%s or ``` blocks)
+2. Do NOT include explanations or comments about what you did
+3. If the function already has partial contents, use those as context
+4. Check the file for helper functions, types, or context you can use
+5. Write idiomatic %s code following best practices
+6. Keep modifiers/signature details present in the input (e.g. export/async/public)
+
+IMPORTS: If the function needs imports/requires that are NOT already in the file, output them FIRST, then output the exact line "---99-IMPORTS-END---", then output the function. If no new imports are needed, just output the function directly.
+
+<Example language="go">
+<Input>
+func ParseConfig(path string) (*Config, error) {
+}
+</Input>
+<Output>
+import "encoding/json"
+import "os"
+---99-IMPORTS-END---
+func ParseConfig(path string) (*Config, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	var cfg Config
+	if err := json.Unmarshal(data, &cfg); err != nil {
+		return nil, err
+	}
+	return &cfg, nil
+}
+</Output>
+</Example>
 
 <Example language="typescript">
 <Input>
@@ -60,10 +84,7 @@ export function fizz_buzz(count: number): void {
   }
 }
 </Output>
-<Notes>
-- Keep modifiers/signature details present in the input (e.g. export/async/public)
-- Return ONLY the function, nothing else
-</Notes>
+<Notes>No new imports needed, so no ---99-IMPORTS-END--- marker.</Notes>
 </Example>
 
 If there are DIRECTIONS provided, follow them precisely. Do not deviate.
