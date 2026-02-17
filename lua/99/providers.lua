@@ -336,7 +336,7 @@ local GitLabDuoProvider = setmetatable({}, { __index = BaseProvider })
 --- @param query string
 --- @param request _99.Request
 --- @return string[]
-function GitLabDuoProvider._build_command(_, query, request)
+function GitLabDuoProvider._build_command(_, query, _request)
   return {
     "duo",
     "run",
