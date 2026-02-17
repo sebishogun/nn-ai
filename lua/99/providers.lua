@@ -327,6 +327,34 @@ function CodexProvider._get_default_model()
   return "gpt-codex-5.3"
 end
 
+--- @class GitLabDuoProvider : _99.Providers.BaseProvider
+--- GitLab Duo CLI provider using `duo` command (headless mode)
+--- Install: npm install -g @gitlab/duo-cli
+--- Auth: Run `duo` once to set up GitLab token
+local GitLabDuoProvider = setmetatable({}, { __index = BaseProvider })
+
+--- @param query string
+--- @param request _99.Request
+--- @return string[]
+function GitLabDuoProvider._build_command(_, query, request)
+  return {
+    "duo",
+    "run",
+    "--goal",
+    query,
+  }
+end
+
+--- @return string
+function GitLabDuoProvider._get_provider_name()
+  return "GitLabDuoProvider"
+end
+
+--- @return string
+function GitLabDuoProvider._get_default_model()
+  return "gitlab-duo"
+end
+
 return {
   OpenCodeProvider = OpenCodeProvider,
   ClaudeCodeProvider = ClaudeCodeProvider,
@@ -335,4 +363,5 @@ return {
   CopilotCLIProvider = CopilotCLIProvider,
   GeminiProvider = GeminiProvider,
   CodexProvider = CodexProvider,
+  GitLabDuoProvider = GitLabDuoProvider,
 }

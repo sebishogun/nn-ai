@@ -88,6 +88,24 @@ describe("providers", function()
     end)
   end)
 
+  describe("GitLabDuoProvider", function()
+    it("builds correct command with goal", function()
+      local request = { context = { model = "gitlab-duo" } }
+      local cmd =
+        Providers.GitLabDuoProvider._build_command(nil, "test query", request)
+      eq({
+        "duo",
+        "run",
+        "--goal",
+        "test query",
+      }, cmd)
+    end)
+
+    it("has correct default model", function()
+      eq("gitlab-duo", Providers.GitLabDuoProvider._get_default_model())
+    end)
+  end)
+
   describe("provider integration", function()
     it("can be set as provider override", function()
       local _99 = require("99")
@@ -138,6 +156,7 @@ describe("providers", function()
       eq("function", type(Providers.CopilotCLIProvider.make_request))
       eq("function", type(Providers.GeminiProvider.make_request))
       eq("function", type(Providers.CodexProvider.make_request))
+      eq("function", type(Providers.GitLabDuoProvider.make_request))
     end)
   end)
 end)
